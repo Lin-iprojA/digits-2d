@@ -1,0 +1,122 @@
+[
+  {
+    "id": 1,
+    "customer_name": "TG_Leo",
+    "chat_id": 8997172803,
+    "bet_type": "kway poo",
+    "input_value": "123",
+    "expanded_numbers": [
+      "11",
+      "12",
+      "13",
+      "21",
+      "22",
+      "23",
+      "31",
+      "32",
+      "33"
+    ],
+    "amount_per_number": 1000.0,
+    "total_amount": 9000.0,
+    "win_status": "Lose",
+    "payout": 0.0,
+    "session": "Evening (04:30 PM)",
+    "created_at": "2026-09-17 12:33:19 PM",
+    "is_archived": true
+  },
+  {
+    "id": 2,
+    "customer_name": "TG_Kiyoko",
+    "chat_id": 1766474461,
+    "bet_type": "kway poo",
+    "input_value": "60",
+    "expanded_numbers": [
+      "00",
+      "06",
+      "60",
+      "66"
+    ],
+    "amount_per_number": 5000.0,
+    "total_amount": 20000.0,
+    "win_status": "Lose",
+    "payout": 0.0,
+    "session": "Evening (04:30 PM)",
+    "created_at": "2026-09-17 12:35:45 PM",
+    "is_archived": true
+  },
+  {
+    "id": 3,
+    "customer_name": "TG_Kiyoko",
+    "chat_id": 1766474461,
+    "bet_type": "pat thee",
+    "input_value": "1",
+    "expanded_numbers": [
+      "01",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "19",
+      "21",
+      "31",
+      "41",
+      "51",
+      "61",
+      "71",
+      "81",
+      "91"
+    ],
+    "amount_per_number": 5000.0,
+    "total_amount": 95000.0,
+    "win_status": "Lose",
+    "payout": 0.0,
+    "session": "Evening (04:30 PM)",
+    "created_at": "2026-09-17 12:38:06 PM",
+    "is_archived": true
+  },
+  {
+    "id": 4,
+    "customer_name": "TG_Leo",
+    "chat_id": 8997172803,
+    "bet_type": "kway poo",
+    "input_value": "09",
+    "expanded_numbers": [
+      "00",
+      "09",
+      "90",
+      "99"
+    ],
+    "amount_per_number": 1000.0,
+    "total_amount": 4000.0,
+    "win_status": "Lose",
+    "payout": 0.0,
+    "session": "Evening (04:30 PM)",
+    "created_at": "2026-09-17 12:47:29 PM",
+    "is_archived": true
+  },
+  {
+    "id": 5,
+    "customer_name": "TG_Leo",
+    "chat_id": 8997172803,
+    "bet_type": "kway poo",
+    "input_value": "09",
+    "expanded_numbers": [
+      "00",
+      "09",
+      "90",
+      "99"
+    ],
+    "amount_per_number": 2000.0,
+    "total_amount": 8000.0,
+    "win_status": "Lose",
+    "payout": 0.0,
+    "session": "Evening (04:30 PM)",
+    "created_at": "2026-09-17 12:47:37 PM",
+    "is_archived": true
+  }
+]

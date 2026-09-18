@@ -623,6 +623,7 @@ def execute_bet_confirmation(chat_id, name):
             f"တစ်ကွက် - {amt_str} ကျပ်\n"
             f"စုစုပေါင်း - {total_str} ကျပ်\n\n"
             f"ပေါက်ဂဏန်းထွက်မယ့်အချိန်ကို စောင့်ကြည့်လိုက်ရအောင်..."
+            f"ထီပေါက်ပါစေ... Good Luck ပါ...🍀..."
         )
         send_telegram_message(chat_id, voucher_str)
     else:
@@ -803,6 +804,10 @@ def fetch_telegram_updates_sync(offset):
     except Exception as e:
         return None
 
+@app.get("/")
+def root():
+    return {"status": "ok", "app": "2D Lottery API"}
+
 async def telegram_polling_loop():
     offset = 0
     while True:
@@ -812,9 +817,14 @@ async def telegram_polling_loop():
                 for update in data.get("result", []):
                     offset = update["update_id"] + 1
                     await telegram_webhook(update)
-        except Exception as e:
-            pass
-        await asyncio.sleep(1)
+                await asyncio.sleep(1)
+            elif data and not data.get("ok") and data.get("error_code") == 409:
+                # Webhook is active on Cloud! Polling is not needed, sleep 60 seconds
+                await asyncio.sleep(60)
+            else:
+                await asyncio.sleep(5)
+        except Exception:
+            await asyncio.sleep(5)
 
 @app.on_event("startup")
 async def startup_event():

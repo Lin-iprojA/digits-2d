@@ -7,12 +7,15 @@ class ApiService {
   static String get baseUrl {
     if (kIsWeb) {
       final host = Uri.base.host;
-      if (host.isNotEmpty) {
+      if (host.contains('vercel.app') || host.contains('onrender.com') || host.contains('github.io')) {
+        return 'https://digits-2d-backend.onrender.com';
+      }
+      if (host.isNotEmpty && host != 'localhost' && host != '127.0.0.1') {
         return 'http://$host:8000';
       }
       return 'http://localhost:8000';
     }
-    return 'http://10.0.2.2:8000';
+    return 'https://digits-2d-backend.onrender.com';
   }
 
   static Future<Map<String, dynamic>> submitBet({

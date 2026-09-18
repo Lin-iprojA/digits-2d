@@ -1,19 +1,36 @@
 class SessionResult {
   final String title;
+  final String openTime;
   final String setIndex;
   final String setValue;
   final String twoD;
 
   SessionResult({
     required this.title,
+    required this.openTime,
     required this.setIndex,
     required this.setValue,
     required this.twoD,
   });
 
   factory SessionResult.fromJson(Map<String, dynamic> json) {
+    String rawTime = json['open_time']?.toString() ?? json['time']?.toString() ?? '--';
+    
+    // Map open_time to friendly 12-hour title
+    String displayTitle = rawTime;
+    if (rawTime.startsWith('11:00')) {
+      displayTitle = '11:00 AM';
+    } else if (rawTime.startsWith('12:01')) {
+      displayTitle = '12:01 PM';
+    } else if (rawTime.startsWith('15:00') || rawTime.startsWith('03:00')) {
+      displayTitle = '03:00 PM';
+    } else if (rawTime.startsWith('16:30') || rawTime.startsWith('04:30')) {
+      displayTitle = '04:30 PM';
+    }
+
     return SessionResult(
-      title: json['open_time']?.toString() ?? json['time']?.toString() ?? json['title']?.toString() ?? '--',
+      title: displayTitle,
+      openTime: rawTime,
       setIndex: json['set']?.toString() ?? '--',
       setValue: json['value']?.toString() ?? '--',
       twoD: json['twod']?.toString() ?? json['2d']?.toString() ?? '--',
@@ -26,6 +43,7 @@ class StockModel {
   final String setValue;
   final String time;
   final String date;
+  final String live2D;
   final List<SessionResult> results;
 
   StockModel({
@@ -33,6 +51,7 @@ class StockModel {
     required this.setValue,
     required this.time,
     required this.date,
+    required this.live2D,
     required this.results,
   });
 
@@ -51,14 +70,16 @@ class StockModel {
       setValue: data['value']?.toString() ?? '--',
       time: data['time']?.toString() ?? '--',
       date: data['date']?.toString() ?? data['time']?.toString() ?? '--',
+      live2D: data['twod']?.toString() ?? '--',
       results: parsedResults,
     );
   }
 
-  // Derive 2D Number:
-  // First digit: Last digit of SET Index decimal
-  // Second digit: Last digit of Value integer part (before decimal)
+  // Derived 2D Number calculation or official live2D
   String get derived2D {
+    if (live2D != '--' && live2D.isNotEmpty && int.tryParse(live2D) != null) {
+      return live2D;
+    }
     if (setIndex == '--' || setValue == '--' || setIndex.isEmpty || setValue.isEmpty) {
       return '--';
     }
@@ -83,6 +104,24 @@ class StockModel {
       return '--';
     } catch (e) {
       return '--';
+    }
+  }
+
+  // Get official Morning Result (12:01 PM)
+  SessionResult? get morningResult {
+    try {
+      return results.firstWhere((r) => r.openTime.startsWith('12:01'));
+    } catch (_) {
+      return null;
+    }
+  }
+
+  // Get official Evening Result (16:30 PM)
+  SessionResult? get eveningResult {
+    try {
+      return results.firstWhere((r) => r.openTime.startsWith('16:30'));
+    } catch (_) {
+      return null;
     }
   }
 }

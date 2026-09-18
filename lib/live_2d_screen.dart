@@ -212,8 +212,20 @@ class _Live2DScreenState extends State<Live2DScreen> {
     final backendSession = _drawData['session'] ?? '';
     final isMorning = backendSession.contains('Morning');
 
-    // Display the winning number if session draw is published, else show live derived
-    final display2D = (winningNum != null) ? winningNum.toString() : (_stockData?.derived2D ?? '--');
+    // Official API session 2D numbers
+    final morningApi2D = _stockData?.morningResult?.twoD;
+    final eveningApi2D = _stockData?.eveningResult?.twoD;
+
+    String display2D = '--';
+    if (winningNum != null) {
+      display2D = winningNum.toString();
+    } else if (isMorning && morningApi2D != null && morningApi2D != '--') {
+      display2D = morningApi2D;
+    } else if (!isMorning && eveningApi2D != null && eveningApi2D != '--') {
+      display2D = eveningApi2D;
+    } else {
+      display2D = _stockData?.derived2D ?? '--';
+    }
 
     final todayStr = DateTime.now().toString().split(' ')[0]; // YYYY-MM-DD
     
@@ -274,24 +286,42 @@ class _Live2DScreenState extends State<Live2DScreen> {
   }
 
   Widget _buildSessionCardsList(String current2D, bool isMorning, bool isDrawn) {
-    final liveSet = _stockData?.setIndex ?? '--';
-    final liveVal = _stockData?.setValue ?? '--';
+    final results = _stockData?.results ?? [];
+
+    SessionResult? res11 = results.length > 0 ? results[0] : null;
+    SessionResult? res12 = results.length > 1 ? results[1] : null;
+    SessionResult? res15 = results.length > 2 ? results[2] : null;
+    SessionResult? res16 = results.length > 3 ? results[3] : null;
 
     return Column(
       children: [
-        _buildSessionCard('11:00 AM', '1,577.98', '30,297.96', '87'),
         _buildSessionCard(
-          '12:01 PM',
-          isMorning ? liveSet : '1,579.50',
-          isMorning ? liveVal : '36,874.98',
-          isMorning ? current2D : '04',
+          res11?.title ?? '11:00 AM',
+          res11?.setIndex ?? '--',
+          res11?.setValue ?? '--',
+          res11?.twoD ?? '--',
         ),
-        _buildSessionCard('03:00 PM', '--', '--', '--'),
         _buildSessionCard(
-          '04:30 PM',
-          !isMorning ? liveSet : '--',
-          !isMorning ? liveVal : '--',
-          !isMorning ? current2D : '--',
+          res12?.title ?? '12:01 PM',
+          res12?.setIndex ?? (isMorning ? (_stockData?.setIndex ?? '--') : '--'),
+          res12?.setValue ?? (isMorning ? (_stockData?.setValue ?? '--') : '--'),
+          res12?.twoD != null && res12!.twoD != '--'
+              ? res12.twoD
+              : (isMorning ? current2D : '--'),
+        ),
+        _buildSessionCard(
+          res15?.title ?? '03:00 PM',
+          res15?.setIndex ?? '--',
+          res15?.setValue ?? '--',
+          res15?.twoD ?? '--',
+        ),
+        _buildSessionCard(
+          res16?.title ?? '04:30 PM',
+          res16?.setIndex ?? (!isMorning ? (_stockData?.setIndex ?? '--') : '--'),
+          res16?.setValue ?? (!isMorning ? (_stockData?.setValue ?? '--') : '--'),
+          res16?.twoD != null && res16!.twoD != '--'
+              ? res16.twoD
+              : (!isMorning ? current2D : '--'),
         ),
       ],
     );

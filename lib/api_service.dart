@@ -83,12 +83,14 @@ class ApiService {
 }
 
 class ThaiStockApiService {
-  // Placeholder API. If docs.thaistock2d.com provides a specific endpoint, replace here.
   static const String _baseUrl = 'https://api.thaistock2d.com/live';
 
   static Future<StockModel> fetchLiveStock() async {
     try {
-      final response = await http.get(Uri.parse(_baseUrl)).timeout(const Duration(seconds: 10));
+      final response = await http.get(
+        Uri.parse(_baseUrl),
+        headers: {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'},
+      ).timeout(const Duration(seconds: 10));
       if (response.statusCode == 200) {
         return StockModel.fromJson(jsonDecode(response.body));
       } else {
